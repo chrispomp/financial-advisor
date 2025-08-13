@@ -18,6 +18,7 @@ python-dotenv = "^1.0.0"
 google-adk = "^1.10.0"
 absl-py = "^2.3.1"
 matplotlib = "^3.7.1"
+toml = "^0.10.2"
 
 [tool.poetry.group.deployment]
 optional = true

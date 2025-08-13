@@ -30,7 +30,7 @@ data_visualization = LlmAgent(
     description=(
         "Generates a line chart of stock prices."
     ),
-    instruction="Generate a line chart of stock prices.",
+    instruction="Generate a line chart of stock prices using the provided `prices`, `ticker`, and `dates`. The `prices` and `dates` will be lists of values.",
     output_key="data_visualization_output",
     tools=[
         charting.plot_stock_prices,

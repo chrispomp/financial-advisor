@@ -2,6 +2,7 @@
 
 import os
 from typing import Any, cast
+import toml
 
 import vertexai
 from absl import app, flags
@@ -10,20 +11,32 @@ from financial_advisor.agent import root_agent
 from vertexai import agent_engines
 from vertexai.preview import reasoning_engines
 
-# Your hardcoded Agent Engine ID
-AGENT_ENGINE_ID = "projects/fsi-banking-agentspace/locations/us-central1/reasoningEngines/4932136483319447552"
 
 FLAGS = flags.FLAGS
 flags.DEFINE_string("project_id", None, "GCP project ID.")
 flags.DEFINE_string("location", None, "GCP location.")
 flags.DEFINE_string("bucket", None, "GCP bucket.")
+flags.DEFINE_string("agent_engine_id", None, "The ID of the Agent Engine to update or delete.")
+
 
 flags.DEFINE_bool("list", False, "List all agents.")
 flags.DEFINE_bool("create", False, "Creates a new agent.")
 flags.DEFINE_bool("update", False, "Updates an existing agent.")
 flags.DEFINE_bool("delete", False, "Deletes an existing agent.")
-flags.mark_bool_flags_as_mutual_exclusive(["create", "delete", "update"])
+flags.mark_bool_flags_as_mutual_exclusive(["create", "delete", "update", "list"])
 
+def get_requirements():
+    """Reads dependencies from pyproject.toml"""
+    with open("pyproject.toml", "r") as f:
+        pyproject_data = toml.load(f)
+    
+    dependencies = pyproject_data.get("tool", {}).get("poetry", {}).get("dependencies", {})
+    
+    # Filter out python dependency and format for requirements list
+    requirements = [
+        f"{name}{version}" for name, version in dependencies.items() if name != "python"
+    ]
+    return requirements
 
 def create() -> None:
     """Creates an agent engine for Financial Advisors."""
@@ -32,44 +45,39 @@ def create() -> None:
     remote_agent = agent_engines.create(
         agent_engine=app,
         display_name=root_agent.name,
-        requirements=[
-            "google-adk (>=0.0.2)",
-            "google-cloud-aiplatform[agent_engines] (>=1.91.0,!=1.92.0)",
-            "google-genai (>=1.5.0,<2.0.0)",
-            "pydantic (>=2.10.6,<3.0.0)",
-            "absl-py (>=2.2.1,<3.0.0)",
-        ],
-        extra_packages=["financial_advisor/agent.py"],
+        requirements=get_requirements(),
+        extra_packages=["financial_advisor/agent.py", "financial_advisor/charting.py", "financial_advisor/prompt.py"],
     )
     print(f"Created remote agent: {remote_agent.resource_name}")
 
 
 def update() -> None:
     """Updates an existing agent engine for Financial Advisors."""
+    if not FLAGS.agent_engine_id:
+        print("Please provide --agent_engine_id to update.")
+        return
+
     app = reasoning_engines.AdkApp(agent=root_agent, enable_tracing=True)
 
     updated_agent = agent_engines.update(
-        resource_name=AGENT_ENGINE_ID,
+        resource_name=FLAGS.agent_engine_id,
         agent_engine=cast(Any, app),
         display_name=root_agent.name,
-        requirements=[
-            "google-adk (>=0.0.2)",
-            "google-cloud-aiplatform[agent_engines] (>=1.91.0,!=1.92.0)",
-            "google-genai (>=1.5.0,<2.0.0)",
-            "pydantic (>=2.10.6,<3.0.0)",
-            "absl-py (>=2.2.1,<3.0.0)",
-            "matplotlib>=3.7.1",
-        ],
-        extra_packages=["financial_advisor/agent.py", "financial_advisor/charting.py"],
+        requirements=get_requirements(),
+        extra_packages=["financial_advisor/agent.py", "financial_advisor/charting.py", "financial_advisor/prompt.py"],
     )
     print(f"Updated remote agent: {updated_agent.resource_name}")
 
 
 def delete() -> None:
     """Deletes an existing agent engine for Financial Advisors."""
-    remote_agent = agent_engines.get(AGENT_ENGINE_ID)
+    if not FLAGS.agent_engine_id:
+        print("Please provide --agent_engine_id to delete.")
+        return
+        
+    remote_agent = agent_engines.get(FLAGS.agent_engine_id)
     remote_agent.delete(force=True)
-    print(f"Deleted remote agent: {AGENT_ENGINE_ID}")
+    print(f"Deleted remote agent: {FLAGS.agent_engine_id}")
 
 
 def list_agents() -> None:
