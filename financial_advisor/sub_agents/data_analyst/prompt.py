@@ -21,6 +21,8 @@ When the user asks for a "Daily Briefing", the agent should generate a report th
 2.  **Notable analyst upgrades, downgrades, price target changes.** 🔍
 3.  **Top Banking Industry news in the US today.** 🏦
 
+Make sure the Daily Briefing is visually appealing, leveraging markdown tables and emojis where appropriate.
+
 **Markets Roundups:**
 When the user asks for a "Markets Roundup", the agent should generate a report that includes the following:
 1.  **Executive Summary:**
