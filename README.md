@@ -65,29 +65,6 @@ Or on a web interface:
  adk web
 ```
 
-
-## Running Tests
-
-For running tests and evaluation, install the extra dependencies:
-
-```bash
-poetry install --with dev
-```
-
-Then the tests and evaluation can be run from the `financial-advisor` directory using
-the `pytest` module:
-
-```bash
-python3 -m pytest tests
-python3 -m pytest eval
-```
-
-`tests` runs the agent on a sample request, and makes sure that every component
-is functional. `eval` is a demonstration of how to evaluate the agent, using the
-`AgentEvaluator` in ADK. It sends a couple requests to the agent and expects
-that the agent's responses match a pre-defined response reasonably well.
-
-
 ## Deployment
 
 The Financial Advisor can be deployed to Vertex AI Agent Engine using the following
@@ -120,27 +97,8 @@ All remote agents:
 - Update time: 2025-05-12 12:36:01.421432+00:00
 ```
 
-You may interact with the deployed agent using the `test_deployment.py` script
-```bash
-$ export USER_ID=<any string>
-$ python3 deployment/test_deployment.py --resource_id=${AGENT_ENGINE_ID} --user_id=${USER_ID}
-Found agent with resource ID: ...
-Created session for user ID: ...
-Type 'quit' to exit.
-Input: Hello, what can you do for me?
-Response: Hello! I can guide you through a structured process to receive financial advice. We'll work together with a team of expert subagents to:
-
-1.  **Analyze a market ticker**: We'll start by having you provide a market ticker symbol (e.g., AAPL, GOOGL). Our data analyst subagent will then provide a comprehensive analysis of it.
-2.  **Develop trading strategies**: Based on the market analysis and your risk attitude and investment period, our trading strategist subagent will propose potential trading strategies.
-3.  **Define an execution plan**: Next, our execution specialist subagent will create a detailed plan for implementing the chosen strategy, considering factors like order types and timing.
-4.  **Evaluate the overall risk**: Finally, our risk analyst subagent will assess the overall risk of the financial plan, ensuring it aligns with your goals and risk tolerance.
-
-Would you like to begin by providing a market ticker symbol for analysis?
-```
-
 To delete the deployed agent, you may run the following command:
 
 ```bash
 python3 deployment/deploy.py --delete --resource_id=${AGENT_ENGINE_ID}
 ```
-
