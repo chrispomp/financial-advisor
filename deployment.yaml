@@ -1,0 +1,9 @@
+# deployment.yaml
+
+# The name of the agent being deployed. This will be the name you use to
+# interact with your agent in Agent Engine.
+agent_name: "market-analyst-agent"
+
+# The entry point for the agent. This should point to the Agent instance
+# you want to deploy.
+entry_point: "market_analyst.main.market_analyst_agent"
