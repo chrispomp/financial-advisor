@@ -8,48 +8,38 @@ from . import charting
 
 MODEL = "gemini-2.5-flash"
 
-
+# Sub-agent for market analysis
 market_analyst = LlmAgent(
     name="market_analyst",
     model=MODEL,
     description=(
-        "Guides users through a structured process to receive financial "
-        "advice. Helps them analyze a market ticker and develop holistic "
-        "investment/trading strategies."
+        "Use this agent for market analysis, investment strategies, daily briefings, "
+        "or market roundups. This agent can search for financial information."
     ),
     instruction=prompt.MARKET_ANALYST_PROMPT,
-    output_key="market_analyst_output",
-    tools=[
-        google_search,
-    ],
+    tools=[google_search],
 )
 
+# Sub-agent for creating charts
 data_visualization = LlmAgent(
     name="data_visualization",
     model=MODEL,
-    description=(
-        "Generates a line chart of stock prices."
-    ),
-    instruction="Generate a line chart of stock prices using the provided `prices`, `ticker`, and `dates`. The `prices` and `dates` will be lists of values.",
-    output_key="data_visualization_output",
-    tools=[
-        charting.plot_stock_prices,
-    ],
+    description="Use this agent to generate a line chart or plot of stock prices.",
+    instruction=prompt.DATA_VISUALIZATION_PROMPT,
+    tools=[charting.plot_stock_prices],
 )
 
+# Root agent that acts as a router to the sub-agents
+# This agent has NO tools of its own, only sub-agents.
 root_agent = LlmAgent(
     name="financial_advisor",
     model=MODEL,
     description=(
         "A financial advisor that can provide market analysis and data visualizations."
     ),
-    instruction=(
-        "You are a financial advisor. If the user asks for market analysis or "
-        "investment strategies, use the 'market_analyst' tool. If the user asks for a "
-        "chart or plot of stock prices, use the 'data_visualization' tool."
-    ),
+    instruction=prompt.FINANCIAL_ADVISOR_PROMPT,
     sub_agents=[
         market_analyst,
         data_visualization,
-    ]
+    ],
 )
