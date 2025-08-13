@@ -24,12 +24,57 @@ MARKET_ANALYST_PROMPT = """
     *   **Output**: A holistic investment/trading strategy, including trading strategy generation, execution planning, and risk analysis.
 
 ### Daily Briefings
-* **Top Movers (Equities, 48 hours)**:
-    * Top 5 Gainers
-    * Top 5 Losers
-* **Analyst Actions**: Notable upgrades, downgrades, and price target changes.
-* **US Banking News**: Top headlines for the day.
+* Every briefing should include the following sections:
+    1. Top 5 Gainers (Equities, 48 hours)**
+    2. Top 5 Losers (Equities, 48 hours)**
+    3. Analyst Actions: Notable upgrades, downgrades, and price target changes.
+    4. US Banking News: Top headlines for the day.
+* Briefings should be visually appealing, using emojis and tables where appropriate.
+* Here's an example briefing for reference:
 
+## Market Snapshot: August 13, 2025
+
+Here's a look at the latest market-moving news, including top stock performers, notable analyst calls, and key developments in the banking and finance sector.
+
+### **Top 5 Gainers 🚀**
+
+| Ticker | Company Name | % Change |
+|---|---|---|
+| STAA | STAAR Surgical | +44.91% |
+| XMTR | Xometry | +10.27% |
+| LMND | Lemonade | +4.07% |
+| HLIO | Helios Technologies | +1.36% |
+| AMRC | Ameresco | +0.51% |
+
+### **Top 5 Losers 📉**
+
+| Ticker | Company Name | % Change |
+|---|---|---|
+| BRBR | BellRing Brands | -32.55% |
+| INSP | Inspire Medical Systems | -4.53% (week) |
+| IT | Gartner | -30.3% (week) |
+| ATKR | Atkore | -27.57% (week) |
+| ODD | ODDITY Tech Ltd | -18.09% (week) |
+
+### **Notable Analyst Changes**
+
+*   **Accenture (ACN):** HSBC initiated coverage on Accenture with a "Reduce" rating and a price target of $240. The bank believes the market is underestimating the risk of disruption from artificial intelligence, which could put pressure on pricing.
+*   **Southern Co. (SO):** BMO Capital reiterated its "Outperform" rating on Southern Co. and raised its price target to $102 from $98.
+*   **ONEOK (OKE):** Raymond James maintained an "Outperform" rating for ONEOK but lowered its price target to $100 from $110.
+*   **Palantir (PLTR):** Following a reported 43.82% increase in revenue for the first half of the year, Deutsche Bank upgraded Palantir from a "Sell" to a "Hold" rating, increasing the price target to $160 from $80.
+
+### **In the News**
+
+*   **Pfizer (PFE):** The pharmaceutical giant raised its profit forecast for 2025. The company now projects adjusted earnings per share to be between $2.90 and $3.10, a 10-cent increase. The optimistic outlook is attributed to strong performance of its COVID-19 drugs and other key medications, as well as cost-cutting measures.
+
+### **Top Banking & Finance News**
+
+*   **JPMorgan and Bank of America:** Shares of both banking giants fell after former President Trump stated he would issue an executive order to penalize banks he claims discriminate against conservatives. Trump accused the banks of refusing to do business with him.
+*   **Federal Reserve and FDIC:** The two agencies have released the public portions of resolution plans, also known as living wills, for the eight largest and most complex domestic banking organizations. These plans are a requirement of the Dodd-Frank Act and outline a bank's strategy for an orderly resolution in case of failure.
+*   **Federal Reserve Board:** Adriana D. Kugler has resigned from her position as a member of the Federal Reserve Board, with her resignation effective August 8, 2025.
+*   **Old National Bancorp (ONB):** The bank announced that it will pay dividends on its preferred stock on August 20, 2025, to all shareholders of record as of August 5, 2025.
+*   **Atlanta Fed:** The Federal Reserve Bank of Atlanta has promoted Philip "Phil" Ridgway to Vice President of Product Development for Federal Reserve Financial Services.
+    
 ### Markets Roundups
 1.  **Executive Summary**:
     * A 3-bullet point summary of key market developments.
