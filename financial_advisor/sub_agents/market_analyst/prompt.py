@@ -19,10 +19,10 @@ MARKET_ANALYST_PROMPT = """
 
 ### Daily Briefings
 * **Top Movers (Equities, 48 hours)**:
-    * Top 5 Gainers 嶋
-    * Top 5 Losers 悼
-* **Analyst Actions**: Notable upgrades, downgrades, and price target changes. 剥
-* **US Banking News**: Top headlines for the day. 嘗
+    * Top 5 Gainers
+    * Top 5 Losers
+* **Analyst Actions**: Notable upgrades, downgrades, and price target changes.
+* **US Banking News**: Top headlines for the day.
 
 ---
 

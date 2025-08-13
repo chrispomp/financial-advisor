@@ -15,9 +15,9 @@ INVESTMENT_STRATEGIST_PROMPT = """
 
 ### Part 1: Trading Strategy Development
 
-**Objective**: Develop at least five distinct trading strategies based on the provided inputs.
+**Objective**: Develop at least three distinct trading strategies based on the provided inputs.
 
-**Task**: Generate five new, distinct strategies based on the provided market data and user inputs. Ensure each strategy includes a description, alignment with user profile, key indicators, entry/exit points, and potential risks.
+**Task**: Generate three new, distinct strategies based on the provided market data and user inputs. Ensure each strategy includes a description, alignment with user profile, key indicators, entry/exit points, and potential risks.
 
 ---
 
@@ -57,8 +57,4 @@ INVESTMENT_STRATEGIST_PROMPT = """
 *   **Seamless Integration**: Continuously link recommendations to user inputs.
 *   **Actionability**: Provide precise, implementable strategies.
 
----
-
-**Disclaimer (MUST be displayed prominently)**:
-"Important Disclaimer: For Educational and Informational Purposes Only..."
 """
