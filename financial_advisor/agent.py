@@ -2,6 +2,7 @@
 
 from google.adk.agents import LlmAgent
 from google.adk.tools.agent_tool import AgentTool
+import asyncio
 
 from . import prompt
 from .sub_agents.data_analyst import data_analyst_agent
@@ -30,5 +31,8 @@ financial_coordinator = LlmAgent(
         AgentTool(agent=risk_analyst_agent),
     ],
 )
+
+async def run_in_parallel(*coroutines):
+    return await asyncio.gather(*coroutines)
 
 root_agent = financial_coordinator
