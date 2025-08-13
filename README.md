@@ -1,37 +1,3 @@
-# Financial Advisor
-
-
-## Overview
-
-The Financial Advisor is a team of specialized AI agents that assists human financial advisors.
-
-1. Data Analyst Agent: This agent is responsible for creating in-depth and current market analysis reports for specific stock tickers. It achieves this by repeatedly using Google Search to find a predetermined amount of unique, recent (within a given timeframe), and insightful information. The agent focuses on gathering both SEC filings and broader market intelligence via Google Search tool, which it then uses to compile a structured report based solely on the collected data.
-
-2. Trading Analyst Agent: This agent's task is to develop and describe at least five different trading strategies. It does this by carefully reviewing the comprehensive market analysis provided by the Data Analyst Agent. Each proposed strategy must be customized to match the user's declared risk tolerance and intended investment duration.
-
-3. Execution Agent: This agent creates a thorough and well-justified plan for implementing a given trading strategy. The plan must be carefully adjusted to fit the user's risk tolerance, investment timeframe, and preferred methods of execution. The output will be detailed and fact-based, examining the best approaches and specific timing for initiating, maintaining, adding to, partially selling, and completely exiting investment positions.
-
-4. Risk Evaluation Agent: This agent's role is to produce a detailed and reasoned analysis of the risks associated with a specific trading strategy and its execution plan. This analysis needs to be precisely aligned with the user's stated risk tolerance, investment period, and execution preferences. The output will be rich in factual analysis, clearly outlining all identified risks and suggesting concrete, actionable steps to lessen their impact.
-
-## Agent Details
-
-The key features of the Financial Advisor include:
-
-| Feature | Description |
-| --- | --- |
-| **Interaction Type** | Conversational |
-| **Complexity**  | Medium |
-| **Agent Type**  | Multi Agent |
-| **Components**  | Tools: built-in Google Search |
-| **Vertical**  | Financial |
-
-
-### Agent architecture:
-
-This diagram shows the detailed architecture of the agents and tools used
-to implement this workflow.
-<img src="financial-advisor.png" alt="Financial Advisor" width="800"/>
-
 ## Setup and Installation
 
 1.  **Prerequisites**
