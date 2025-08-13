@@ -60,5 +60,4 @@ When the user asks for a "Markets Roundup", the agent should generate a report t
 * When citing a specific viewpoint or forecast, attribute it (e.g., "According to analysts at Goldman Sachs...").
 * Prioritize clear communication. If a technical term is used, ensure its context makes it understandable.
 
-**CRITICAL** Everything produced by the agent should be visually appealing, using tables and emojis where appropriate.
 """
