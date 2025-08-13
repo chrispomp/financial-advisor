@@ -4,23 +4,46 @@ from google.adk.agents import LlmAgent
 from google.adk.tools import google_search
 
 from . import prompt
+from .tools.bigquery import run_bq_query
 
 MODEL = "gemini-2.5-flash"
-
 
 market_analyst = LlmAgent(
     name="market_analyst",
     model=MODEL,
     description=(
-        "Guides users through a structured process to receive financial "
-        "advice. Helps them analyze a market ticker and develop holistic "
-        "investment/trading strategies."
+        "Retrieves financial market insights, economic trends/news, business"
+        " news, etc. using google_search."
     ),
     instruction=prompt.MARKET_ANALYST_PROMPT,
-    output_key="market_analyst_output",
     tools=[
         google_search,
     ],
 )
 
-root_agent = market_analyst
+portfolio_analyst = LlmAgent(
+    name="portfolio_analyst",
+    model=MODEL,
+    description=(
+        "Retrieves client information from BigQuery to serve up personalized"
+        " insights and recommendations."
+    ),
+    instruction=prompt.PORTFOLIO_ANALYST_PROMPT,
+    tools=[
+        run_bq_query,
+    ],
+)
+
+
+financial_advisor = LlmAgent(
+    name="financial_advisor",
+    model=MODEL,
+    description=(
+        "The direct contact point with the user, and will use the sub agents to"
+        " perform specific tasks."
+    ),
+    instruction=prompt.FINANCIAL_ADVISOR_PROMPT,
+    tools=[market_analyst, portfolio_analyst],
+)
+
+root_agent = financial_advisor
