@@ -1,7 +1,8 @@
 """Financial advisor: provide reasonable investment strategies"""
 from google.adk.agents import LlmAgent
-from . import sub_agents
+from google.adk.tools import google_search
 from . import prompts # UPDATED IMPORT
+from . import tools
 
 MODEL = "gemini-2.5-flash"
 
@@ -13,8 +14,9 @@ root_agent = LlmAgent(
         "A financial advisor that can provide market analysis and data visualizations."
     ),
     instruction=prompts.FINANCIAL_ADVISOR_PROMPT, # UPDATED REFERENCE
-    sub_agents=[
-        sub_agents.market_analyst,
-        sub_agents.data_visualization,
+    tools=[
+        google_search,
+        tools.plot_stock_prices_tool,
     ],
+    enable_planning=True,
 )
