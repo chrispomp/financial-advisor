@@ -1,0 +1,8 @@
+google-cloud-aiplatform[adk,agent-engines]
+google-genai
+pydantic
+python-dotenv
+google-adk
+absl-py
+google-cloud-bigquery
+pandas

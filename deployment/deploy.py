@@ -50,7 +50,7 @@ def update() -> None:
 
     updated_agent = agent_engines.update(
         resource_name=AGENT_ENGINE_ID,
-        agent_engine=cast(Any, app),
+        agent_engine=app,
         display_name=root_agent.name,
         requirements=[
             "google-adk (>=0.0.2)",
