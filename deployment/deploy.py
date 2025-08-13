@@ -1,13 +1,14 @@
-"""Deployment script for Market Analyst"""
+"""Deployment script"""
 
 import os
+from typing import Any, cast
 
 import vertexai
 from absl import app, flags
 from dotenv import load_dotenv
 from financial_advisor.agent import root_agent
 from vertexai import agent_engines
-from vertexai.preview.reasoning_engines import AdkApp
+from vertexai.preview import reasoning_engines
 
 # Your hardcoded Agent Engine ID
 AGENT_ENGINE_ID = "projects/fsi-banking-agentspace/locations/us-central1/reasoningEngines/4932136483319447552"
@@ -26,10 +27,10 @@ flags.mark_bool_flags_as_mutual_exclusive(["create", "delete", "update"])
 
 def create() -> None:
     """Creates an agent engine for Financial Advisors."""
-    adk_app = AdkApp(agent=root_agent, enable_tracing=True)
+    app = reasoning_engines.AdkApp(agent=root_agent, enable_tracing=True)
 
     remote_agent = agent_engines.create(
-        adk_app,
+        agent_engine=app,
         display_name=root_agent.name,
         requirements=[
             "google-adk (>=0.0.2)",
@@ -38,19 +39,27 @@ def create() -> None:
             "pydantic (>=2.10.6,<3.0.0)",
             "absl-py (>=2.2.1,<3.0.0)",
         ],
-        #        extra_packages=[""],
+        extra_packages=["financial_advisor/agent.py"],
     )
     print(f"Created remote agent: {remote_agent.resource_name}")
 
 
 def update() -> None:
     """Updates an existing agent engine for Financial Advisors."""
-    adk_app = AdkApp(agent=root_agent, enable_tracing=True)
+    app = reasoning_engines.AdkApp(agent=root_agent, enable_tracing=True)
 
     updated_agent = agent_engines.update(
         resource_name=AGENT_ENGINE_ID,
-        agent_engine=adk_app,
+        agent_engine=cast(Any, app),
         display_name=root_agent.name,
+        requirements=[
+            "google-adk (>=0.0.2)",
+            "google-cloud-aiplatform[agent_engines] (>=1.91.0,!=1.92.0)",
+            "google-genai (>=1.5.0,<2.0.0)",
+            "pydantic (>=2.10.6,<3.0.0)",
+            "absl-py (>=2.2.1,<3.0.0)",
+        ],
+        extra_packages=["financial_advisor/agent.py"],
     )
     print(f"Updated remote agent: {updated_agent.resource_name}")
 
