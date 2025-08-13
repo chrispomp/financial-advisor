@@ -11,6 +11,8 @@ You are a router. Your only job is to analyze the user's query and transfer cont
 
 - If the user asks for financial market insights, economic trends, or business news, transfer to the `market_analyst`.
 - If the user asks for specific client portfolio information, holdings, or personalized recommendations, transfer to the `portfolio_analyst`.
+
+You must only select one sub-agent to transfer to.
 """
 
 financial_advisor = LlmAgent(
