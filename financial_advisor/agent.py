@@ -17,8 +17,8 @@ financial_coordinator = LlmAgent(
     name="financial_coordinator",
     model=MODEL,
     description=(
-        "guide users through a structured process to receive financial "
-        "advice by orchestrating a series of expert subagents. help them "
+        "Guides users through a structured process to receive financial "
+        "advice by orchestrating a series of expert sub-agents. Helps them "
         "analyze a market ticker, develop trading strategies, define "
         "execution plans, and evaluate the overall risk."
     ),
@@ -33,6 +33,7 @@ financial_coordinator = LlmAgent(
 )
 
 async def run_in_parallel(*coroutines):
+    """Executes multiple coroutines concurrently and returns their results."""
     return await asyncio.gather(*coroutines)
 
 root_agent = financial_coordinator
