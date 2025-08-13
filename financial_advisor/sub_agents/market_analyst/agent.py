@@ -1,7 +1,8 @@
 """Market analyst agent."""
 
 from google.adk.agents import LlmAgent
-from google.adk.tools import google_search
+# Change this import to use your local google_search tool
+from financial_advisor.tools.google_search import google_search
 
 from . import prompt
 
