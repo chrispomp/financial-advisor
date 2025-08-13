@@ -63,11 +63,4 @@ This is a sequential process. **You must complete each step before moving to the
     *   ---
     *   **Part 3: Comprehensive Risk Analysis**
 
-### **Summary of Key Fixes:**
-
-1.  **Explicit State Check:** The new **Step 1** forces the agent to review the conversation history, acting as a short-term memory. This is the most critical change to prevent the loop.
-2.  **Sequential Logic:** The process is now explicitly linear (`Step 1 -> Step 2 -> Step 3 -> Step 4`). This prevents the agent from re-evaluating the initial conditions out of order.
-3.  **"Stop and Wait" Command:** The instruction to **"stop and wait for their response"** is a clear directive to the model to pause its execution and await user input, rather than trying to ask all questions or perform all actions at once.
-4.  **Clarity and Simplicity:** The logic is simplified to "Check history first. If info is missing, ask. Once you have everything, proceed." This is much easier for the AI to interpret and execute reliably.
-
 """
