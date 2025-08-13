@@ -11,7 +11,7 @@ MODEL = "gemini-2.5-flash"
 # Instantiate the Agent.
 # This agent is designed to act as a Market Analyst, capable of fetching
 # and processing real-time financial data to produce insightful reports.
-root_agent = Agent(
+market_analyst_agent = Agent(
     model=MODEL,
     name="market_analyst",
     instruction=prompt.MARKET_ANALYST_PROMPT,
