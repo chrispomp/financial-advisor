@@ -84,7 +84,7 @@ to implement this workflow.
         export GOOGLE_GENAI_USE_VERTEXAI=true
         export GOOGLE_CLOUD_PROJECT=fsi-banking-agentspace
         export GOOGLE_CLOUD_LOCATION=us-central1
-        export GOOGLE_CLOUD_STORAGE_BUCKET=gs://fsi-banking-agentspace-adk-staging
+        export GOOGLE_CLOUD_STORAGE_BUCKET=fsi-banking-agentspace-adk-staging
         ```
 
     *   Authenticate your GCloud account.
