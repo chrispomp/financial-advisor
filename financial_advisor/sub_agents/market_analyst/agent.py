@@ -1,7 +1,8 @@
 """Market analyst agent."""
 
 from google.adk.agents import LlmAgent
-from financial_advisor.tools.google_search import google_search
+# Correctly import the google_search tool instance
+from google.adk.tools import google_search 
 
 from . import prompt
 
@@ -11,8 +12,13 @@ market_analyst = LlmAgent(
     name="market_analyst",
     model=MODEL,
     description=(
-        "Use this agent for financial market insights, economic trends, and business news."
+        "Guides users through a structured process to receive financial "
+        "advice. Helps them analyze a market ticker and develop holistic "
+        "investment/trading strategies."
     ),
     instruction=prompt.MARKET_ANALYST_PROMPT,
-    tools=[google_search],
+    output_key="market_analyst_output",
+    tools=[
+        google_search,
+    ],
 )
