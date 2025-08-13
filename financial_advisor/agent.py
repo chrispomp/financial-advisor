@@ -4,8 +4,9 @@ from google.adk.agents import LlmAgent
 from google.adk.tools import google_search
 
 from . import prompt
+from . import charting
 
-MODEL = "gemini-2.5-flash"
+MODEL = "gemini-1.5-flash"
 
 
 market_analyst = LlmAgent(
@@ -20,6 +21,7 @@ market_analyst = LlmAgent(
     output_key="market_analyst_output",
     tools=[
         google_search,
+        charting.plot_stock_prices,
     ],
 )
 

@@ -59,6 +59,7 @@ If the user responds to the initial greeting with a number from 1-4, then execut
     "
     
     * If market data analysis has not been performed, use the `Google Search` tool to get the market data.
+    * After retrieving the market data, use the `plot_stock_prices` tool to generate a chart of the historical stock prices.
     * (Optional) Ask for execution preferences (e.g., preferred brokers or order types).
     * Once all inputs are available, generate and output a holistic investment/trading strategy. The strategy must include:
         1.  Trading Strategy Generation
