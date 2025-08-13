@@ -12,6 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Financial coordinator: provide reasonable investment strategies"""
+"""trading_analyst_agent for proposing trading strategies"""
 
-from . import agent
+from .agent import trading_analyst_agent

@@ -1,99 +1,63 @@
-"""Deployment script"""
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""Deployment script for Financial Advisor"""
 
 import os
-from typing import Any, cast
-import toml
 
 import vertexai
 from absl import app, flags
 from dotenv import load_dotenv
 from financial_advisor.agent import root_agent
 from vertexai import agent_engines
-from vertexai.preview import reasoning_engines
-
+from vertexai.preview.reasoning_engines import AdkApp
 
 FLAGS = flags.FLAGS
 flags.DEFINE_string("project_id", None, "GCP project ID.")
 flags.DEFINE_string("location", None, "GCP location.")
 flags.DEFINE_string("bucket", None, "GCP bucket.")
-flags.DEFINE_string("agent_engine_id", None, "The ID of the Agent Engine to update or delete.")
-
+flags.DEFINE_string("resource_id", None, "ReasoningEngine resource ID.")
 
 flags.DEFINE_bool("list", False, "List all agents.")
 flags.DEFINE_bool("create", False, "Creates a new agent.")
-flags.DEFINE_bool("update", False, "Updates an existing agent.")
 flags.DEFINE_bool("delete", False, "Deletes an existing agent.")
-flags.mark_bool_flags_as_mutual_exclusive(["create", "delete", "update", "list"])
+flags.mark_bool_flags_as_mutual_exclusive(["create", "delete"])
 
-def get_requirements():
-    """Reads dependencies from pyproject.toml"""
-    with open("pyproject.toml", "r") as f:
-        pyproject_data = toml.load(f)
-    
-    dependencies = pyproject_data.get("tool", {}).get("poetry", {}).get("dependencies", {})
-    
-    # Filter out python dependency and format for requirements list
-    requirements = [
-        f"{name}{version}" for name, version in dependencies.items() if name != "python"
-    ]
-    return requirements
 
 def create() -> None:
     """Creates an agent engine for Financial Advisors."""
-    app = reasoning_engines.AdkApp(agent=root_agent, enable_tracing=True)
+    adk_app = AdkApp(agent=root_agent, enable_tracing=True)
 
-    # FINAL extra_packages LIST
     remote_agent = agent_engines.create(
-        agent_engine=app,
+        adk_app,
         display_name=root_agent.name,
-        requirements=get_requirements(),
-        extra_packages=[
-            "financial_advisor/__init__.py",
-            "financial_advisor/agent.py",
-            "financial_advisor/tools/__init__.py",
-            "financial_advisor/tools/charting.py",
-            "financial_advisor/prompts/__init__.py",
-            "financial_advisor/prompts/root_agent.md",
+        requirements=[
+            "google-adk (>=0.0.2)",
+            "google-cloud-aiplatform[agent_engines] (>=1.91.0,!=1.92.0)",
+            "google-genai (>=1.5.0,<2.0.0)",
+            "pydantic (>=2.10.6,<3.0.0)",
+            "absl-py (>=2.2.1,<3.0.0)",
         ],
+        #        extra_packages=[""],
     )
     print(f"Created remote agent: {remote_agent.resource_name}")
 
 
-def update() -> None:
-    """Updates an existing agent engine for Financial Advisors."""
-    if not FLAGS.agent_engine_id:
-        print("Please provide --agent_engine_id to update.")
-        return
-
-    app = reasoning_engines.AdkApp(agent=root_agent, enable_tracing=True)
-
-    # FINAL extra_packages LIST
-    updated_agent = agent_engines.update(
-        resource_name=FLAGS.agent_engine_id,
-        agent_engine=cast(Any, app),
-        display_name=root_agent.name,
-        requirements=get_requirements(),
-        extra_packages=[
-            "financial_advisor/__init__.py",
-            "financial_advisor/agent.py",
-            "financial_advisor/tools/__init__.py",
-            "financial_advisor/tools/charting.py",
-            "financial_advisor/prompts/__init__.py",
-            "financial_advisor/prompts/root_agent.md",
-        ],
-    )
-    print(f"Updated remote agent: {updated_agent.resource_name}")
-
-
-def delete() -> None:
-    """Deletes an existing agent engine for Financial Advisors."""
-    if not FLAGS.agent_engine_id:
-        print("Please provide --agent_engine_id to delete.")
-        return
-        
-    remote_agent = agent_engines.get(FLAGS.agent_engine_id)
+def delete(resource_id: str) -> None:
+    remote_agent = agent_engines.get(resource_id)
     remote_agent.delete(force=True)
-    print(f"Deleted remote agent: {FLAGS.agent_engine_id}")
+    print(f"Deleted remote agent: {resource_id}")
 
 
 def list_agents() -> None:
@@ -153,12 +117,13 @@ def main(argv: list[str]) -> None:
         list_agents()
     elif FLAGS.create:
         create()
-    elif FLAGS.update:
-        update()
     elif FLAGS.delete:
-        delete()
+        if not FLAGS.resource_id:
+            print("resource_id is required for delete")
+            return
+        delete(FLAGS.resource_id)
     else:
-        print("Unknown command. Please use --list, --create, --update, or --delete.")
+        print("Unknown command")
 
 
 if __name__ == "__main__":

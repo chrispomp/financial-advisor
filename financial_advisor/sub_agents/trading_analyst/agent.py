@@ -12,6 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Financial coordinator: provide reasonable investment strategies"""
+"""Execution_analyst_agent for finding the ideal execution strategy"""
 
-from . import agent
+from google.adk import Agent
+
+from . import prompt
+
+MODEL="gemini-2.5-pro"
+
+trading_analyst_agent = Agent(
+    model=MODEL,
+    name="trading_analyst_agent",
+    instruction=prompt.TRADING_ANALYST_PROMPT,
+    output_key="proposed_trading_strategies_output",
+)

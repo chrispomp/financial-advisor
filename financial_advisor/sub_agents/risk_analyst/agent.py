@@ -12,6 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Financial coordinator: provide reasonable investment strategies"""
+"""Risk Analysis Agent for providing the final risk evaluation"""
 
-from . import agent
+from google.adk import Agent
+
+from . import prompt
+
+MODEL="gemini-2.5-pro"
+
+risk_analyst_agent = Agent(
+    model=MODEL,
+    name="risk_analyst_agent",
+    instruction=prompt.RISK_ANALYST_PROMPT,
+    output_key="final_risk_assessment_output",
+)
