@@ -1,12 +1,9 @@
 """Market analyst agent."""
 
 from google.adk.agents import LlmAgent
-# Correctly import the google_search tool instance
-from google.adk.tools import google_search 
-
+from google.adk.tools import google_search
+from financial_advisor.config import MODEL
 from . import prompt
-
-MODEL = "gemini-2.5-flash"
 
 market_analyst = LlmAgent(
     name="market_analyst",

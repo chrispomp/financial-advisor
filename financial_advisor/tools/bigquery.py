@@ -15,6 +15,10 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+class BigQueryError(Exception):
+    """Custom exception for BigQuery errors."""
+
+
 def run_bq_query(query: str) -> str:
     """
     Executes a standard SQL query against Google BigQuery.
@@ -24,10 +28,13 @@ def run_bq_query(query: str) -> str:
 
     Returns:
         A string containing the query results in JSON format or a detailed error message.
+
+    Raises:
+        BigQueryError: If the Google Cloud Project ID is not configured.
     """
     project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
     if not project_id:
-        return "Error: Google Cloud Project ID is not configured."
+        raise BigQueryError("Google Cloud Project ID is not configured.")
     try:
         client = bigquery.Client(project=project_id)
         logger.info(f"[Tool] Executing BigQuery query: {query}")
