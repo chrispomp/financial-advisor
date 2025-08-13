@@ -1,3 +1,5 @@
-"""Financial coordinator: provide reasonable investment strategies"""
+"""Financial advisor: provide reasonable investment strategies"""
 
-from . import agent
+from .agent import market_analyst
+
+__all__ = ["market_analyst"]

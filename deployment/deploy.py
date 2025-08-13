@@ -1,4 +1,4 @@
-"""Deployment script for Financial Advisor"""
+"""Deployment script for Market Analyst"""
 
 import os
 
