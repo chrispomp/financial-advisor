@@ -1,5 +1,5 @@
 """Financial advisor: provide reasonable investment strategies"""
 
-from .agent import market_analyst
+from .agent import root_agent
 
-__all__ = ["market_analyst"]
+__all__ = ["root_agent"]

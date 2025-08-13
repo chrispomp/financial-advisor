@@ -12,35 +12,29 @@ market_analyst = LlmAgent(
     name="market_analyst",
     model=MODEL,
     description=(
-        "Retrieves financial market insights, economic trends/news, business"
-        " news, etc. using google_search."
+        "Use this agent for financial market insights, economic trends, and business news."
     ),
     instruction=prompt.MARKET_ANALYST_PROMPT,
-    tools=[
-        google_search,
-    ],
+    tools=[google_search],
 )
 
 portfolio_analyst = LlmAgent(
     name="portfolio_analyst",
     model=MODEL,
     description=(
-        "Retrieves client information from BigQuery to serve up personalized"
-        " insights and recommendations."
+        "Use this agent for specific client portfolio information, holdings, and personalized recommendations."
     ),
     instruction=prompt.PORTFOLIO_ANALYST_PROMPT,
-    tools=[
-        run_bq_query,
-    ],
+    tools=[run_bq_query],
 )
 
 
+# This is now a "pure" router agent with NO tools of its own.
 financial_advisor = LlmAgent(
     name="financial_advisor",
     model=MODEL,
     description=(
-        "The direct contact point with the user, and will use the sub agents to"
-        " perform specific tasks."
+        "A router agent that directs user queries to the appropriate sub-agent."
     ),
     instruction=prompt.FINANCIAL_ADVISOR_PROMPT,
     sub_agents=[market_analyst, portfolio_analyst],

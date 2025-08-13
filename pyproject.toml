@@ -19,6 +19,7 @@ google-adk = "^1.10.0"
 absl-py = "^2.3.1"
 google-cloud-bigquery = "^3.35.1"
 pandas = "^2.3.1"
+google-api-python-client = "^2.179.0"
 
 [tool.poetry.group.deployment]
 optional = true
