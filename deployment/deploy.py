@@ -9,7 +9,7 @@ from financial_advisor.agent import root_agent
 from vertexai import agent_engines
 from vertexai.preview.reasoning_engines import AdkApp
 
-# Agent Engine ID
+# Your hardcoded Agent Engine ID
 AGENT_ENGINE_ID = "projects/fsi-banking-agentspace/locations/us-central1/reasoningEngines/4932136483319447552"
 
 FLAGS = flags.FLAGS
@@ -47,17 +47,10 @@ def update() -> None:
     """Updates an existing agent engine for Financial Advisors."""
     adk_app = AdkApp(agent=root_agent, enable_tracing=True)
 
-    remote_agent = agent_engines.get(AGENT_ENGINE_ID)
-    updated_agent = remote_agent.update(
-        adk_app,
+    updated_agent = agent_engines.update(
+        resource_name=AGENT_ENGINE_ID,
+        agent_engine=adk_app,
         display_name=root_agent.name,
-        requirements=[
-            "google-adk (>=0.0.2)",
-            "google-cloud-aiplatform[agent_engines] (>=1.91.0,!=1.92.0)",
-            "google-genai (>=1.5.0,<2.0.0)",
-            "pydantic (>=2.10.6,<3.0.0)",
-            "absl-py (>=2.2.1,<3.0.0)",
-        ],
     )
     print(f"Updated remote agent: {updated_agent.resource_name}")
 
