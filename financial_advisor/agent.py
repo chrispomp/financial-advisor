@@ -5,10 +5,8 @@ from google.adk.tools.agent_tool import AgentTool
 import asyncio
 
 from . import prompt
-from .sub_agents.data_analyst import data_analyst_agent
-from .sub_agents.execution_analyst import execution_analyst_agent
-from .sub_agents.risk_analyst import risk_analyst_agent
-from .sub_agents.trading_analyst import trading_analyst_agent
+from .sub_agents.market_analyst.agent import market_analyst_agent
+from .sub_agents.investment_strategist.agent import investment_strategist_agent
 
 MODEL = "gemini-2.5-flash"
 
@@ -19,16 +17,14 @@ financial_coordinator = LlmAgent(
     description=(
         "Guides users through a structured process to receive financial "
         "advice by orchestrating a series of expert sub-agents. Helps them "
-        "analyze a market ticker, develop trading strategies, define "
-        "execution plans, and evaluate the overall risk."
+        "analyze a market ticker and develop holistic investment/trading "
+        "strategies."
     ),
     instruction=prompt.FINANCIAL_COORDINATOR_PROMPT,
     output_key="financial_coordinator_output",
     tools=[
-        AgentTool(agent=data_analyst_agent),
-        AgentTool(agent=trading_analyst_agent),
-        AgentTool(agent=execution_analyst_agent),
-        AgentTool(agent=risk_analyst_agent),
+        AgentTool(agent=market_analyst_agent),
+        AgentTool(agent=investment_strategist_agent),
     ],
 )
 
