@@ -14,7 +14,7 @@ MODEL = "gemini-2.5-flash"
 
 
 financial_coordinator = LlmAgent(
-    name="financial_coordinator",
+    name="Market Analyst",
     model=MODEL,
     description=(
         "guide users through a structured process to receive financial "
