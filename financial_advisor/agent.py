@@ -1,6 +1,6 @@
 """Financial advisor: provide reasonable investment strategies"""
 
-from google.adk.agents import LlmAgent, RouterAgent
+from google.adk.agents import LlmAgent
 from google.adk.tools import google_search
 
 from . import prompt
@@ -35,7 +35,7 @@ portfolio_analyst = LlmAgent(
 )
 
 
-financial_advisor = RouterAgent(
+financial_advisor = LlmAgent(
     name="financial_advisor",
     model=MODEL,
     description=(
@@ -43,7 +43,7 @@ financial_advisor = RouterAgent(
         " perform specific tasks."
     ),
     instruction=prompt.FINANCIAL_ADVISOR_PROMPT,
-    agents=[market_analyst, portfolio_analyst],
+    sub_agents=[market_analyst, portfolio_analyst],
 )
 
 root_agent = financial_advisor
