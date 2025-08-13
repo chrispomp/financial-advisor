@@ -42,11 +42,24 @@ def create() -> None:
     """Creates an agent engine for Financial Advisors."""
     app = reasoning_engines.AdkApp(agent=root_agent, enable_tracing=True)
 
+    # FINAL extra_packages LIST
     remote_agent = agent_engines.create(
         agent_engine=app,
         display_name=root_agent.name,
         requirements=get_requirements(),
-        extra_packages=["financial_advisor/agent.py", "financial_advisor/charting.py", "financial_advisor/prompt.py"],
+        extra_packages=[
+            "financial_advisor/__init__.py",
+            "financial_advisor/agent.py",
+            "financial_advisor/sub_agents/__init__.py",
+            "financial_advisor/sub_agents/market_analyst.py",
+            "financial_advisor/sub_agents/data_visualization.py",
+            "financial_advisor/tools/__init__.py",
+            "financial_advisor/tools/charting.py",
+            "financial_advisor/prompts/__init__.py",
+            "financial_advisor/prompts/root_agent.md",
+            "financial_advisor/prompts/market_analyst.md",
+            "financial_advisor/prompts/data_visualization.md",
+        ],
     )
     print(f"Created remote agent: {remote_agent.resource_name}")
 
@@ -59,12 +72,25 @@ def update() -> None:
 
     app = reasoning_engines.AdkApp(agent=root_agent, enable_tracing=True)
 
+    # FINAL extra_packages LIST
     updated_agent = agent_engines.update(
         resource_name=FLAGS.agent_engine_id,
         agent_engine=cast(Any, app),
         display_name=root_agent.name,
         requirements=get_requirements(),
-        extra_packages=["financial_advisor/agent.py", "financial_advisor/charting.py", "financial_advisor/prompt.py"],
+        extra_packages=[
+            "financial_advisor/__init__.py",
+            "financial_advisor/agent.py",
+            "financial_advisor/sub_agents/__init__.py",
+            "financial_advisor/sub_agents/market_analyst.py",
+            "financial_advisor/sub_agents/data_visualization.py",
+            "financial_advisor/tools/__init__.py",
+            "financial_advisor/tools/charting.py",
+            "financial_advisor/prompts/__init__.py",
+            "financial_advisor/prompts/root_agent.md",
+            "financial_advisor/prompts/market_analyst.md",
+            "financial_advisor/prompts/data_visualization.md",
+        ],
     )
     print(f"Updated remote agent: {updated_agent.resource_name}")
 
