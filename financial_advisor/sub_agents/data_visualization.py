@@ -10,5 +10,5 @@ data_visualization = LlmAgent(
     model=MODEL,
     description="Use this agent to generate a line chart or plot of stock prices.",
     instruction=prompts.DATA_VISUALIZATION_PROMPT,
-    tools=[tools.plot_stock_prices],
+    tools=[tools.plot_stock_prices_tool],
 )
