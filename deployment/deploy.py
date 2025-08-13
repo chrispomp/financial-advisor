@@ -9,16 +9,19 @@ from financial_advisor.agent import root_agent
 from vertexai import agent_engines
 from vertexai.preview.reasoning_engines import AdkApp
 
+# Agent Engine ID
+AGENT_ENGINE_ID = "projects/fsi-banking-agentspace/locations/us-central1/reasoningEngines/4932136483319447552"
+
 FLAGS = flags.FLAGS
 flags.DEFINE_string("project_id", None, "GCP project ID.")
 flags.DEFINE_string("location", None, "GCP location.")
 flags.DEFINE_string("bucket", None, "GCP bucket.")
-flags.DEFINE_string("resource_id", None, "ReasoningEngine resource ID.")
 
 flags.DEFINE_bool("list", False, "List all agents.")
 flags.DEFINE_bool("create", False, "Creates a new agent.")
+flags.DEFINE_bool("update", False, "Updates an existing agent.")
 flags.DEFINE_bool("delete", False, "Deletes an existing agent.")
-flags.mark_bool_flags_as_mutual_exclusive(["create", "delete"])
+flags.mark_bool_flags_as_mutual_exclusive(["create", "delete", "update"])
 
 
 def create() -> None:
@@ -40,10 +43,30 @@ def create() -> None:
     print(f"Created remote agent: {remote_agent.resource_name}")
 
 
-def delete(resource_id: str) -> None:
-    remote_agent = agent_engines.get(resource_id)
+def update() -> None:
+    """Updates an existing agent engine for Financial Advisors."""
+    adk_app = AdkApp(agent=root_agent, enable_tracing=True)
+
+    remote_agent = agent_engines.get(AGENT_ENGINE_ID)
+    updated_agent = remote_agent.update(
+        adk_app,
+        display_name=root_agent.name,
+        requirements=[
+            "google-adk (>=0.0.2)",
+            "google-cloud-aiplatform[agent_engines] (>=1.91.0,!=1.92.0)",
+            "google-genai (>=1.5.0,<2.0.0)",
+            "pydantic (>=2.10.6,<3.0.0)",
+            "absl-py (>=2.2.1,<3.0.0)",
+        ],
+    )
+    print(f"Updated remote agent: {updated_agent.resource_name}")
+
+
+def delete() -> None:
+    """Deletes an existing agent engine for Financial Advisors."""
+    remote_agent = agent_engines.get(AGENT_ENGINE_ID)
     remote_agent.delete(force=True)
-    print(f"Deleted remote agent: {resource_id}")
+    print(f"Deleted remote agent: {AGENT_ENGINE_ID}")
 
 
 def list_agents() -> None:
@@ -103,13 +126,12 @@ def main(argv: list[str]) -> None:
         list_agents()
     elif FLAGS.create:
         create()
+    elif FLAGS.update:
+        update()
     elif FLAGS.delete:
-        if not FLAGS.resource_id:
-            print("resource_id is required for delete")
-            return
-        delete(FLAGS.resource_id)
+        delete()
     else:
-        print("Unknown command")
+        print("Unknown command. Please use --list, --create, --update, or --delete.")
 
 
 if __name__ == "__main__":

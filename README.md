@@ -100,5 +100,9 @@ All remote agents:
 To delete the deployed agent, you may run the following command:
 
 ```bash
-python3 deployment/deploy.py --delete --resource_id=${AGENT_ENGINE_ID}
+# To update your agent
+python3 deployment/deploy.py --update
+
+# To delete your agent
+python3 deployment/deploy.py --delete
 ```
