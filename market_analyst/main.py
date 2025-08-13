@@ -1,12 +1,12 @@
 # main.py
 
-from google.adk import Agent
+from google.adk.agents import Agent
 from google.adk.tools import google_search
 
 from . import prompt
 
-# Define the model to be used by the agent.
-MODEL = "gemini-1.5-flash"
+# It's a good practice to use the latest compatible model for optimal performance.
+MODEL = "gemini-2.5-flash"
 
 # Instantiate the Agent.
 # This agent is designed to act as a Market Analyst, capable of fetching
