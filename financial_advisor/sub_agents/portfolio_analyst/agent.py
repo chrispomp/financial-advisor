@@ -5,7 +5,7 @@ from google.adk.agents import LlmAgent
 from financial_advisor.tools.bigquery import run_bq_query
 from . import prompt
 
-MODEL = "gemini-1.5-flash"
+MODEL = "gemini-2.5-flash"
 
 portfolio_analyst = LlmAgent(
     name="portfolio_analyst",

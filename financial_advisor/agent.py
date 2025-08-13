@@ -4,7 +4,7 @@ from google.adk.agents import LlmAgent
 
 from .sub_agents import market_analyst, portfolio_analyst
 
-MODEL = "gemini-1.5-flash"
+MODEL = "gemini-2.5-flash"
 
 FINANCIAL_ADVISOR_PROMPT = """
 You are a router. Your only job is to analyze the user's query and transfer control to the most appropriate sub-agent based on its description. Do not try to answer the question yourself.
