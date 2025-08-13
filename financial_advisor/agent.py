@@ -21,8 +21,35 @@ market_analyst = LlmAgent(
     output_key="market_analyst_output",
     tools=[
         google_search,
+    ],
+)
+
+data_visualization = LlmAgent(
+    name="data_visualization",
+    model=MODEL,
+    description=(
+        "Generates a line chart of stock prices."
+    ),
+    instruction="Generate a line chart of stock prices.",
+    output_key="data_visualization_output",
+    tools=[
         charting.plot_stock_prices,
     ],
 )
 
-root_agent = market_analyst
+root_agent = LlmAgent(
+    name="financial_advisor",
+    model=MODEL,
+    description=(
+        "A financial advisor that can provide market analysis and data visualizations."
+    ),
+    instruction=(
+        "You are a financial advisor. If the user asks for market analysis or "
+        "investment strategies, use the 'market_analyst' tool. If the user asks for a "
+        "chart or plot of stock prices, use the 'data_visualization' tool."
+    ),
+    sub_agents=[
+        market_analyst,
+        data_visualization,
+    ]
+)
