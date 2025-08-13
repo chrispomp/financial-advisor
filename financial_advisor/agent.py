@@ -1,42 +1,25 @@
 """Financial advisor: provide reasonable investment strategies"""
 
 from google.adk.agents import LlmAgent
-from google.adk.tools import google_search
 
-from . import prompt
-from .tools.bigquery import run_bq_query
+from .sub_agents import market_analyst, portfolio_analyst
 
-MODEL = "gemini-2.5-flash"
+MODEL = "gemini-1.5-flash"
 
-market_analyst = LlmAgent(
-    name="market_analyst",
-    model=MODEL,
-    description=(
-        "Use this agent for financial market insights, economic trends, and business news."
-    ),
-    instruction=prompt.MARKET_ANALYST_PROMPT,
-    tools=[google_search],
-)
+FINANCIAL_ADVISOR_PROMPT = """
+You are a router. Your only job is to analyze the user's query and transfer control to the most appropriate sub-agent based on its description. Do not try to answer the question yourself.
 
-portfolio_analyst = LlmAgent(
-    name="portfolio_analyst",
-    model=MODEL,
-    description=(
-        "Use this agent for specific client portfolio information, holdings, and personalized recommendations."
-    ),
-    instruction=prompt.PORTFOLIO_ANALYST_PROMPT,
-    tools=[run_bq_query],
-)
+- If the user asks for financial market insights, economic trends, or business news, transfer to the `market_analyst`.
+- If the user asks for specific client portfolio information, holdings, or personalized recommendations, transfer to the `portfolio_analyst`.
+"""
 
-
-# This is now a "pure" router agent with NO tools of its own.
 financial_advisor = LlmAgent(
     name="financial_advisor",
     model=MODEL,
     description=(
         "A router agent that directs user queries to the appropriate sub-agent."
     ),
-    instruction=prompt.FINANCIAL_ADVISOR_PROMPT,
+    instruction=FINANCIAL_ADVISOR_PROMPT,
     sub_agents=[market_analyst, portfolio_analyst],
 )
 
