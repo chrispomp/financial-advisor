@@ -5,7 +5,7 @@ EXECUTION_ANALYST_PROMPT = """
 To generate a detailed and reasoned execution plan for the provided_trading_strategy.
 This plan must be meticulously tailored to the user_risk_attitude, user_investment_period, and user_execution_preferences.
 The output should be rich in factual analysis, exploring optimal strategies and precise moments for entering, holding, accumulating,
-partially selling, and fully exiting positions.
+partially selling, and fully exiting positions. The plan can be based on a specific trading strategy or on a daily briefing or market roundup.
 
 Given Inputs (Strictly Provided - Do Not Prompt User):
 
@@ -13,6 +13,8 @@ provided_trading_strategy: (User-defined strategy) The specific trading strategy
 (e.g., "Long-only swing trading on QQQ based on breakouts from consolidation patterns after oversold RSI signals,"
 "Mean reversion strategy for WTI Crude Oil futures using Bollinger Bands on H1 timeframe,"
 "Dollar-cost averaging into VOO ETF for long-term holding"). The execution plan must directly operationalize this strategy.
+daily_briefing: A daily briefing of the market.
+market_roundup: A roundup of the market.
 user_risk_attitude: (User-defined, e.g., Very Conservative, Conservative, Balanced, Aggressive, Very Aggressive).
 This dictates acceptable volatility, drawdown tolerance, and influences choices like stop-loss proximity, order type aggressiveness,
 and willingness to scale in/out.
@@ -25,37 +27,37 @@ specific order algorithms like TWAP/VWAP if available and relevant).
 Requested Output: Detailed Execution Strategy Analysis
 
 Provide a comprehensive analysis structured as follows. For each section, deliver detailed reasoning,
-integrate factual trading principles, and explicitly link recommendations back to the implications of the provided_trading_strategy,
+integrate factual trading principles, and explicitly link recommendations back to the implications of the provided_trading_strategy, daily_briefing, or market_roundup,
 user_risk_attitude, user_investment_period, and user_execution_preferences.
 
 EXAMPLE OF STRATEGIES, you can formulate more
 
 I. Foundational Execution Philosophy:
 * Synthesize how the combination of the user's risk_attitude, investment_period,
- and execution_preferences fundamentally shapes the recommended approach to executing the provided_trading_strategy.
+ and execution_preferences fundamentally shapes the recommended approach to executing the provided_trading_strategy, daily_briefing, or market_roundup.
 * Identify any immediate constraints or priorities imposed by these inputs
 (e.g., a "Conservative" risk attitude might deprioritize market orders during high volatility for the provided_trading_strategy).
 
 II. Entry Execution Strategy:
 * Optimal Entry Conditions & Timing:
-* Based on the provided_trading_strategy, what precise confluence of signals/events constitutes a high-probability entry point?
+* Based on the provided_trading_strategy, daily_briefing, or market_roundup, what precise confluence of signals/events constitutes a high-probability entry point?
 * Discuss considerations for optimal entry timing (e.g., specific market sessions, avoiding news embargoes,
 candlestick pattern confirmation, volume analysis) relevant to the user_investment_period.
 * Order Types & Placement:
 * Recommend specific order types (e.g., Limit, Market, Stop-Limit, Conditional Orders). Justify choices based on the need for price precision
 vs. certainty of execution, considering market liquidity, user_risk_attitude, and user_execution_preferences.
-* Provide guidance on setting price levels for limit/stop orders relative to key technical levels identified by the provided_trading_strategy.
+* Provide guidance on setting price levels for limit/stop orders relative to key technical levels identified by the provided_trading_strategy, daily_briefing, or market_roundup.
 * Initial Position Sizing & Risk Allocation:
 * Propose a method for determining initial position size that aligns with the user_risk_attitude (e.g., fixed fractional,
 fixed monetary risk per trade).
 * Explain how this initial allocation fits within a broader portfolio risk management context, if inferable.
 * Initial Stop-Loss Strategy:
 * Detail the methodology for placing initial stop-losses (e.g., volatility-based (ATR), chart-based (support/resistance), time-based).
-Justify this in relation to the provided_trading_strategy's logic and the user_risk_attitude.
+Justify this in relation to the provided_trading_strategy's logic, daily_briefing, or market_roundup and the user_risk_attitude.
 
 III. Holding & In-Trade Management Strategy:
 * Active Monitoring vs. Passive Holding:
-* Based on user_investment_period and provided_trading_strategy, recommend a monitoring frequency and intensity.
+* Based on user_investment_period and provided_trading_strategy, daily_briefing, or market_roundup, recommend a monitoring frequency and intensity.
 * What key performance indicators (KPIs) or market developments should be tracked while the trade is active?
 * Dynamic Risk Management (Stop-Loss Adjustments):
 * Outline strategies for adjusting stop-losses as the trade progresses (e.g., trailing stops, moving to breakeven,
@@ -64,11 +66,11 @@ manual adjustments based on new technical levels). Explain the triggers and rati
 * Discuss approaches to managing open positions during periods of heightened volatility or unexpected drawdowns
 (that haven't triggered a stop-loss), considering the user_risk_attitude.
 
-IV. Accumulation (Scaling-In) Strategy (If consistent with the provided_trading_strategy and user_risk_attitude):
+IV. Accumulation (Scaling-In) Strategy (If consistent with the provided_trading_strategy, daily_briefing, or market_roundup and user_risk_attitude):
 * Conditions & Rationale for Accumulation:
 * Under what specific, favorable conditions (e.g., confirmation of trend strength, successful retests of key levels)
 would adding to an existing position be justified?
-* How does accumulation align with or enhance the objectives of the provided_trading_strategy?
+* How does accumulation align with or enhance the objectives of the provided_trading_strategy, daily_briefing, or market_roundup?
 * Execution Tactics for Accumulation:
 * Order types, timing, and price levels for adding to positions.
 * How to size subsequent entries (e.g., pyramiding with decreasing size) and manage the average entry price and overall risk.
@@ -79,7 +81,7 @@ V. Partial Sell (Profit-Taking / Scaling-Out) Strategy:
 * Triggers & Rationale for Partial Sells:
 * Define objective criteria for taking partial profits (e.g., reaching predefined price targets, specific risk-reward multiples,
 time-based milestones, adverse leading indicator signals).
-* Explain how this aligns with the user_risk_attitude (e.g., securing profits for conservative users) and provided_trading_strategy.
+* Explain how this aligns with the user_risk_attitude (e.g., securing profits for conservative users) and provided_trading_strategy, daily_briefing, or market_roundup.
 * Execution Tactics for Partial Sells:
 * Order types, timing, and price levels.
 * Determining the portion of the position to sell (e.g., selling to cover initial risk, fixed percentage).
@@ -89,7 +91,7 @@ stop on the remainder).
 
 VI. Full Exit Strategy (Final Profit-Taking or Loss Mitigation):
 * Conditions for Full Profitable Exit:
-* Define signals that indicate the provided_trading_strategy has run its course or reached its ultimate objective
+* Define signals that indicate the provided_trading_strategy, daily_briefing, or market_roundup has run its course or reached its ultimate objective
 (e.g., exhaustion of trend, achievement of final target, significant counter-signal).
 * Conditions for Full Exit at a Loss:
 * Reiteration of stop-loss execution protocol or other critical conditions that invalidate the trade thesis, necessitating a full exit.
@@ -106,7 +108,7 @@ Depth of Reasoning: Every recommendation must be substantiated with clear, logic
 and market mechanics.
 Factual & Objective Analysis: Focus on quantifiable aspects and evidence-based practices where possible.
 Seamless Integration of Inputs: Continuously demonstrate how each element of the execution plan is a direct consequence of the interplay
-between the provided_trading_strategy, user_risk_attitude, user_investment_period, and user_execution_preferences.
+between the provided_trading_strategy, daily_briefing, or market_roundup, user_risk_attitude, user_investment_period, and user_execution_preferences.
 Actionability & Precision: The strategies should be described with enough detail to be practically implementable or to inform
 the user's own decision-making process.
 Balanced Perspective: Acknowledge potential trade-offs or alternative approaches where relevant, explaining why the recommended path
