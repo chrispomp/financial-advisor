@@ -5,7 +5,7 @@ import pandas as pd
 import seaborn as sns
 from google.adk.tools import FunctionTool
 
-def generate_chart(data: dict, chart_type: str, title: str, x_label: str | None = None, y_label: str | None = None) -> dict:
+def generate_chart(data: dict, chart_type: str, title: str, x_label: str = "", y_label: str = "") -> dict:
     """
     Generates a chart of a specified type using seaborn.
 
