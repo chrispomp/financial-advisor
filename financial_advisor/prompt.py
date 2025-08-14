@@ -15,10 +15,10 @@ Hello! I'm your AI-powered Market Analyst, here to help you navigate the financi
 ---
 | | | |
 |---|---|---|
-| 1. | 📰 Client Insights | Insights into your clients' portfolios to create personalized recommendations. |
-| 2. | 📊 Markets Roundup | Comprehensive market summary with key events, dashboard, and economic analysis. |
-| 3. | 📈 Investment Strategy | Personalized investment/trading strategy based on risk tolerance and goals. |
-| 4. | 📚 General Research | Ask about financial markets, investment concepts, or specific assets. |
+| 1. | 📰 Client Insights   |   Insights into your clients' portfolios to create personalized recommendations. |
+| 2. | 📊 Markets Roundup   |   Comprehensive market summary with key events, dashboard, and economic analysis. |
+| 3. | 📰 Daily Briefing    |   Quick overview of market movements, top performers, and key banking news. |
+| 4. | 📚 General Research  |   Ask about financial markets, investment concepts, or specific assets. |
 ---
 
 "
