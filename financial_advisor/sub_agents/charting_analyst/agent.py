@@ -1,20 +1,21 @@
 """Charting analyst agent."""
 
 from google.adk.agents import LlmAgent
+from google.adk.tools.agent_tool import AgentTool
 from financial_advisor.config import MODEL
 from . import prompt
 
-# This is a placeholder for your charting tool.
-# You will need to implement this tool based on your charting library of choice.
-def create_chart(data: str, chart_type: str) -> str:
-    """Creates a chart with the given data and chart type."""
-    return f"Chart of type {chart_type} with data {data} created."
-
+# Import the other sub-agents to use them as tools
+from financial_advisor.sub_agents.market_analyst.agent import market_analyst
+from financial_advisor.sub_agents.portfolio_analyst.agent import portfolio_analyst
 
 charting_analyst = LlmAgent(
     name="charting_analyst",
     model=MODEL,
-    description="Use this agent to generate charts and graphs.",
+    description="Generates charts and graphs based on financial data. Routes requests to other agents to retrieve the necessary information.",
     instruction=prompt.CHARTING_ANALYST_PROMPT,
-    tools=[create_chart],
+    tools=[
+        AgentTool(agent=market_analyst),
+        AgentTool(agent=portfolio_analyst),
+    ],
 )
