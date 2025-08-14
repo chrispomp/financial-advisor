@@ -1,7 +1,7 @@
 [project]
 name = "financial-advisor"
 version = "0.1"
-description = "AI-driven agent designed to facilitate the exploration of the financial advisor landscape"
+description = "AI-powered financial advisor"
 authors = [{ name = "Chris Pomponio", email = "chrispomponio@google.com" }]
 license = "Apache License 2.0"
 readme = "README.md"
