@@ -12,5 +12,6 @@ portfolio_analyst = LlmAgent(
         "Use this agent for specific client portfolio information, holdings, and personalized recommendations."
     ),
     instruction=prompt.PORTFOLIO_ANALYST_PROMPT,
+    output_key="portfolio_analyst_output",
     tools=[run_bq_query],
 )

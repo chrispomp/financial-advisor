@@ -3,7 +3,6 @@
 from google.adk.agents import LlmAgent
 from google.adk.tools import google_search
 from financial_advisor.config import MODEL
-from financial_advisor.tools.charting import charting
 from . import prompt
 
 market_analyst = LlmAgent(
@@ -18,6 +17,5 @@ market_analyst = LlmAgent(
     output_key="market_analyst_output",
     tools=[
         google_search,
-        charting,
     ],
 )
