@@ -72,7 +72,16 @@ commands:
 
 ```bash
 poetry install --with deployment
+
+# To create a new agent
 python3 deployment/deploy.py --create
+
+# To update your agent
+python3 deployment/deploy.py --update
+
+# To delete your agent
+python3 deployment/deploy.py --delete
+
 ```
 
 When the deployment finishes, it will print a line like this:
@@ -95,14 +104,4 @@ All remote agents:
 123456789 ("financial_advisor")
 - Create time: 2025-05-12 12:35:34.245431+00:00
 - Update time: 2025-05-12 12:36:01.421432+00:00
-```
-
-To delete the deployed agent, you may run the following command:
-
-```bash
-# To update your agent
-python3 deployment/deploy.py --update
-
-# To delete your agent
-python3 deployment/deploy.py --delete
 ```
