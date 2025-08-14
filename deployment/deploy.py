@@ -1,4 +1,4 @@
-"""Deployment script"""
+"""Deployment script for Financial Advisor Agent Engine."""
 
 import os
 from typing import Any, cast
@@ -7,132 +7,143 @@ import vertexai
 from absl import app, flags
 from dotenv import load_dotenv
 from financial_advisor.agent import root_agent
-from vertexai import agent_engines
-from vertexai.preview import reasoning_engines
+from google.api_core import exceptions
+from vertexai import agent_engines # Correctly import the module
 
-# Your hardcoded Agent Engine ID
-AGENT_ENGINE_ID = "projects/fsi-banking-agentspace/locations/us-central1/reasoningEngines/4932136483319447552"
-
+# --- Configuration Flags ---
 FLAGS = flags.FLAGS
-flags.DEFINE_string("project_id", None, "GCP project ID.")
-flags.DEFINE_string("location", None, "GCP location.")
-flags.DEFINE_string("bucket", None, "GCP bucket.")
+flags.DEFINE_string("project_id", os.getenv("GOOGLE_CLOUD_PROJECT"), "GCP project ID.")
+flags.DEFINE_string("location", os.getenv("GOOGLE_CLOUD_LOCATION"), "GCP location.")
+flags.DEFINE_string("bucket", os.getenv("GOOGLE_CLOUD_STORAGE_BUCKET"), "GCP bucket for staging.")
+flags.DEFINE_string("agent_id", None, "The resource name ID for an existing Agent Engine.")
 
-flags.DEFINE_bool("list", False, "List all agents.")
+# --- Action Flags ---
 flags.DEFINE_bool("create", False, "Creates a new agent.")
 flags.DEFINE_bool("update", False, "Updates an existing agent.")
 flags.DEFINE_bool("delete", False, "Deletes an existing agent.")
-flags.mark_bool_flags_as_mutual_exclusive(["create", "delete", "update"])
+flags.DEFINE_bool("list", False, "Lists all agents.")
+flags.mark_bool_flags_as_mutual_exclusive(["create", "delete", "update", "list"])
 
-# Shared configurations for create and update
+# --- Agent Configurations ---
 AGENT_DISPLAY_NAME = root_agent.name
+AGENT_DESCRIPTION = "Financial advisor agent that provides investment strategies."
 AGENT_REQUIREMENTS = [
-    "google-adk (>=0.0.2)",
-    "google-cloud-aiplatform[agent_engines] (>=1.91.0,!=1.92.0)",
-    "google-genai (>=1.5.0,<2.0.0)",
-    "pydantic (>=2.10.6,<3.0.0)",
-    "absl-py (>=2.2.1,<3.0.0)",
+    "google-adk>=0.1.0",
+    "google-cloud-aiplatform[agent_engines]>=1.55.0",
+    "google-genai>=1.0.0",
+    "pydantic>=2.0.0",
+    "absl-py>=2.0.0",
     "matplotlib",
-    "cloudpickle",  # Added for deployment serialization
+    "seaborn",
+    "pandas",
+    "db-dtypes"
 ]
 AGENT_EXTRA_PACKAGES = [
-    "financial_advisor",  # Package the entire directory
+    "financial_advisor",
 ]
 
+def create_agent() -> None:
+    """Creates a new Agent Engine."""
+    print("Attempting to create a new agent...")
+    try:
+        # 1. Call create() from the agent_engines module
+        # 2. Correctly use the 'agent_engine' parameter, not 'agent'
+        remote_agent = agent_engines.create(
+            display_name=AGENT_DISPLAY_NAME,
+            description=AGENT_DESCRIPTION,
+            requirements=AGENT_REQUIREMENTS,
+            extra_packages=AGENT_EXTRA_PACKAGES,
+            agent_engine=root_agent,
+        )
+        print(f"✅ Successfully created agent: {remote_agent.resource_name}")
+    except exceptions.GoogleAPICallError as e:
+        print(f"❌ Error creating agent: {e}")
 
-def create() -> None:
-    """Creates an agent engine for Financial Advisors."""
-    remote_agent = agent_engines.create(
-        agent_engine=root_agent,
-        display_name=AGENT_DISPLAY_NAME,
-        requirements=AGENT_REQUIREMENTS,
-        extra_packages=AGENT_EXTRA_PACKAGES,
-    )
-    print(f"Created remote agent: {remote_agent.resource_name}")
+def update_agent(resource_name: str) -> None:
+    """Updates an existing Agent Engine."""
+    print(f"Attempting to update agent: {resource_name}...")
+    try:
+        # 1. Call update() from the agent_engines module
+        # 2. Correctly use 'resource_name' and 'agent_engine' parameters
+        updated_agent = agent_engines.update(
+            resource_name=resource_name,
+            display_name=AGENT_DISPLAY_NAME,
+            description=AGENT_DESCRIPTION,
+            requirements=AGENT_REQUIREMENTS,
+            extra_packages=AGENT_EXTRA_PACKAGES,
+            agent_engine=cast(Any, root_agent),
+        )
+        print(f"✅ Successfully updated agent: {updated_agent.resource_name}")
+    except exceptions.NotFound:
+        print(f"❌ Error: Agent with ID '{resource_name}' not found.")
+    except exceptions.GoogleAPICallError as e:
+        print(f"❌ Error updating agent: {e}")
 
 
-def update() -> None:
-    """Updates an existing agent engine for Financial Advisors."""
-    updated_agent = agent_engines.update(
-        resource_name=AGENT_ENGINE_ID,
-        agent_engine=cast(Any, root_agent),
-        display_name=AGENT_DISPLAY_NAME,
-        requirements=AGENT_REQUIREMENTS,
-        extra_packages=AGENT_EXTRA_PACKAGES,
-    )
-    print(f"Updated remote agent: {updated_agent.resource_name}")
-
-
-def delete() -> None:
-    """Deletes an existing agent engine for Financial Advisors."""
-    remote_agent = agent_engines.get(AGENT_ENGINE_ID)
-    remote_agent.delete(force=True)
-    print(f"Deleted remote agent: {AGENT_ENGINE_ID}")
+def delete_agent(resource_name: str) -> None:
+    """Deletes an existing Agent Engine."""
+    print(f"Attempting to delete agent: {resource_name}...")
+    try:
+        # Call get() from the agent_engines module to fetch the agent first
+        remote_agent = agent_engines.get(resource_name)
+        remote_agent.delete(force=True)
+        print(f"✅ Successfully deleted agent: {resource_name}")
+    except exceptions.NotFound:
+        print(f"❌ Error: Agent with ID '{resource_name}' not found.")
+    except exceptions.GoogleAPICallError as e:
+        print(f"❌ Error deleting agent: {e}")
 
 
 def list_agents() -> None:
-    remote_agents = agent_engines.list()
-    template = """
-{agent.name} ("{agent.display_name}")
-- Create time: {agent.create_time}
-- Update time: {agent.update_time}
-"""
-    remote_agents_string = "\n".join(
-        template.format(agent=agent) for agent in remote_agents
-    )
-    print(f"All remote agents:\n{remote_agents_string}")
+    """Lists all Agent Engines in the project."""
+    print("Fetching list of agents...")
+    try:
+        # Call list() from the agent_engines module
+        remote_agents = agent_engines.list()
+        if not remote_agents:
+            print("No agents found in this project/location.")
+            return
+        template = ('{agent.name} ("{agent.display_name}")\n'
+                    '- Create time: {agent.create_time}\n'
+                    '- Update time: {agent.update_time}')
+        for agent in remote_agents:
+            print(template.format(agent=agent))
+    except exceptions.GoogleAPICallError as e:
+        print(f"❌ Error listing agents: {e}")
 
 
 def main(argv: list[str]) -> None:
-    del argv  # unused
+    del argv  # Unused.
     load_dotenv()
 
-    project_id = (
-        FLAGS.project_id
-        if FLAGS.project_id
-        else os.getenv("GOOGLE_CLOUD_PROJECT")
-    )
-    location = (
-        FLAGS.location if FLAGS.location else os.getenv("GOOGLE_CLOUD_LOCATION")
-    )
-    bucket = (
-        FLAGS.bucket
-        if FLAGS.bucket
-        else os.getenv("GOOGLE_CLOUD_STORAGE_BUCKET")
-    )
+    project_id = FLAGS.project_id
+    location = FLAGS.location
+    bucket = FLAGS.bucket
 
-    print(f"PROJECT: {project_id}")
-    print(f"LOCATION: {location}")
-    print(f"BUCKET: {bucket}")
-
-    if not project_id:
-        print("Missing required environment variable: GOOGLE_CLOUD_PROJECT")
-        return
-    elif not location:
-        print("Missing required environment variable: GOOGLE_CLOUD_LOCATION")
-        return
-    elif not bucket:
-        print(
-            "Missing required environment variable: GOOGLE_CLOUD_STORAGE_BUCKET"
-        )
+    if not all([project_id, location, bucket]):
+        print("❌ Missing required configuration. Ensure GOOGLE_CLOUD_PROJECT, "
+              "GOOGLE_CLOUD_LOCATION, and GOOGLE_CLOUD_STORAGE_BUCKET are set.")
         return
 
-    vertexai.init(
-        project=project_id,
-        location=location,
-        staging_bucket=f"gs://{bucket}",
-    )
+    print(f"Project: {project_id}\nLocation: {location}\nBucket: {bucket}")
+    vertexai.init(project=project_id, location=location, staging_bucket=f"gs://{bucket}")
 
-    if FLAGS.list:
-        list_agents()
-    elif FLAGS.create:
-        create()
+    if FLAGS.create:
+        create_agent()
     elif FLAGS.update:
-        update()
+        if not FLAGS.agent_id:
+            print("❌ --agent_id is required for update operations.")
+            return
+        update_agent(FLAGS.agent_id)
     elif FLAGS.delete:
-        delete()
+        if not FLAGS.agent_id:
+            print("❌ --agent_id is required for delete operations.")
+            return
+        delete_agent(FLAGS.agent_id)
+    elif FLAGS.list:
+        list_agents()
     else:
-        print("Unknown command. Please use --list, --create, --update, or --delete.")
+        print("No command specified. Use --create, --update, --delete, or --list.")
 
 
 if __name__ == "__main__":
