@@ -21,6 +21,7 @@ google-cloud-bigquery = "^3.35.1"
 pandas = "^2.3.1"
 google-api-python-client = "^2.179.0"
 db-dtypes = "^1.4.3"
+matplotlib = "^3.9.2"
 
 [tool.poetry.group.deployment]
 optional = true
