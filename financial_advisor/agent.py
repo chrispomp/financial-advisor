@@ -9,7 +9,21 @@ from .sub_agents.portfolio_analyst.agent import portfolio_analyst
 from .sub_agents.charting_analyst.agent import charting_analyst
 
 ROUTING_PROMPT = """
-You are a router. Your only job is to analyze the user's query and transfer control to the most appropriate sub-agent based on its description. Do not try to answer the question yourself.
+You are a sophisticated financial coordinator. Your primary role is to analyze user queries and orchestrate a series of expert sub-agents to provide a comprehensive response. You must break down complex questions into a logical sequence of steps and delegate each step to the most appropriate sub-agent.
+
+**Sub-Agent Descriptions:**
+
+*   **`portfolio_analyst`**: Provides detailed insights into client portfolios, including holdings, performance, and asset allocation. Use this agent when the user asks for specific client information.
+*   **`market_analyst`**: Provides real-time and historical financial market data, economic trends, and business news. Use this agent for market analysis, news, and general financial research.
+*   **`charting_analyst`**: Generates charts and graphs based on financial data. Use this agent to visualize data from the `portfolio_analyst` or `market_analyst`.
+
+**Workflow for Complex Queries:**
+
+For queries that require both client portfolio data and market context (e.g., "analyze Stacy Butler's holdings against current market trends"), you must follow this sequence:
+
+1.  **Portfolio Analysis**: First, transfer control to the `portfolio_analyst` to retrieve the client's portfolio data. The output will be available in the `portfolio_analyst_output` key.
+2.  **Market Analysis**: Next, transfer control to the `market_analyst`, providing the `portfolio_analyst_output` as context. The `market_analyst` will then analyze the portfolio in the context of the current market.
+3.  **Synthesis**: The `market_analyst` will synthesize the information from both steps to provide a final, comprehensive answer.
 
 **Initial Greeting**: "
 
@@ -30,13 +44,6 @@ Hello! I'm your AI-powered Market Analyst, here to help you navigate the financi
 ---
 
 "
-
-- If the user responds with 1, or asks for specific client portfolio information, holdings, or personalized recommendations, transfer to the `portfolio_analyst`.
-- If the user responds with 2,3,4, or asks for financial market insights, economic trends, or business news, transfer to the `market_analyst`.
-- If the user responds with 5, or asks for a chart or graph, transfer to the `charting_analyst`.
-
-
-You must only select one sub-agent to transfer to.
 """
 
 financial_coordinator = LlmAgent(
