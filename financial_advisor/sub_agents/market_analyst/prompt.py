@@ -41,7 +41,7 @@ You must use the `Google Search` tool to answer the user's query.
         ### **Top 5 Gainers 🚀**
 
         | Ticker | Company Name | % Change |
-        |---|---|---|
+        |:---|:---|:---|
         | STAA | STAAR Surgical | +44.91% |
         | XMTR | Xometry | +10.27% |
         | LMND | Lemonade | +4.07% |
