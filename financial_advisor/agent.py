@@ -6,6 +6,7 @@ from .config import MODEL
 
 from .sub_agents.market_analyst.agent import market_analyst
 from .sub_agents.portfolio_analyst.agent import portfolio_analyst
+from .sub_agents.charting_analyst.agent import charting_analyst
 
 ROUTING_PROMPT = """
 You are a router. Your only job is to analyze the user's query and transfer control to the most appropriate sub-agent based on its description. Do not try to answer the question yourself.
@@ -32,6 +33,7 @@ Hello! I'm your AI-powered Market Analyst, here to help you navigate the financi
 
 - If the user responds with 1, or asks for specific client portfolio information, holdings, or personalized recommendations, transfer to the `portfolio_analyst`.
 - If the user responds with 2,3,4, or asks for financial market insights, economic trends, or business news, transfer to the `market_analyst`.
+- If the user responds with 5, or asks for a chart or graph, transfer to the `charting_analyst`.
 
 
 You must only select one sub-agent to transfer to.
@@ -51,6 +53,7 @@ financial_coordinator = LlmAgent(
     tools=[
         AgentTool(agent=market_analyst),
         AgentTool(agent=portfolio_analyst),
+        AgentTool(agent=charting_analyst),
     ],
 )
 

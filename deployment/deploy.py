@@ -27,10 +27,8 @@ flags.mark_bool_flags_as_mutual_exclusive(["create", "delete", "update"])
 
 def create() -> None:
     """Creates an agent engine for Financial Advisors."""
-    app = reasoning_engines.AdkApp(agent=root_agent, enable_tracing=True)
-
     remote_agent = agent_engines.create(
-        agent_engine=app,
+        agent_engine=root_agent,
         display_name=root_agent.name,
         requirements=[
             "google-adk (>=0.0.2)",
@@ -38,16 +36,18 @@ def create() -> None:
             "google-genai (>=1.5.0,<2.0.0)",
             "pydantic (>=2.10.6,<3.0.0)",
             "absl-py (>=2.2.1,<3.0.0)",
+            "matplotlib",
         ],
-        extra_packages=["financial_advisor/agent.py"],
+        extra_packages=[
+            "financial_advisor/agent.py",
+            "financial_advisor/sub_agents/charting_analyst/agent.py",
+        ],
     )
     print(f"Created remote agent: {remote_agent.resource_name}")
 
 
 def update() -> None:
     """Updates an existing agent engine for Financial Advisors."""
-    app = reasoning_engines.AdkApp(agent=root_agent, enable_tracing=True)
-
     updated_agent = agent_engines.update(
         resource_name=AGENT_ENGINE_ID,
         agent_engine=app,
@@ -58,8 +58,12 @@ def update() -> None:
             "google-genai (>=1.5.0,<2.0.0)",
             "pydantic (>=2.10.6,<3.0.0)",
             "absl-py (>=2.2.1,<3.0.0)",
+            "matplotlib",
         ],
-        extra_packages=["financial_advisor/agent.py"],
+        extra_packages=[
+            "financial_advisor/agent.py",
+            "financial_advisor/sub_agents/charting_analyst/agent.py",
+        ],
     )
     print(f"Updated remote agent: {updated_agent.resource_name}")
 
