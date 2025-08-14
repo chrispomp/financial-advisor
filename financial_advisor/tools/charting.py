@@ -5,7 +5,7 @@ import pandas as pd
 import seaborn as sns
 from google.adk.tools import FunctionTool
 
-def generate_chart(data: dict, chart_type: str, title: str, x_label: str = None, y_label: str = None) -> dict:
+def generate_chart(data: dict, chart_type: str, title: str, x_label: str | None = None, y_label: str | None = None) -> dict:
     """
     Generates a chart of a specified type using seaborn.
 
@@ -35,10 +35,10 @@ def generate_chart(data: dict, chart_type: str, title: str, x_label: str = None,
             else:
                 sns.barplot(data=df)
         elif chart_type == 'pie':
-            if y_label:
-                plt.pie(df[y_label], labels=df[x_label], autopct='%1.1f%%', startangle=140)
+            if y_label and x_label:
+                plt.pie(df[y_label], labels=df[x_label].tolist(), autopct='%1.1f%%', startangle=140)
             else:
-                plt.pie(df.iloc[:, 1], labels=df.iloc[:, 0], autopct='%1.1f%%', startangle=140)
+                plt.pie(df.iloc[:, 1], labels=df.iloc[:, 0].tolist(), autopct='%1.1f%%', startangle=140)
             plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
         else:
             return {"error": "Invalid chart type specified. Please choose 'line', 'bar', or 'pie'."}
