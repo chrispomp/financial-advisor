@@ -2,7 +2,7 @@
 name = "financial-advisor"
 version = "0.1"
 description = "AI-driven agent designed to facilitate the exploration of the financial advisor landscape"
-authors = [{ name = "Antonio Gulli", email = "gulli@google.com" }]
+authors = [{ name = "Chris Pomponio", email = "chrispomponio@google.com" }]
 license = "Apache License 2.0"
 readme = "README.md"
 
@@ -22,6 +22,7 @@ pandas = "^2.3.1"
 google-api-python-client = "^2.179.0"
 db-dtypes = "^1.4.3"
 matplotlib = "^3.7.2"
+seaborn = "^0.13.2"
 
 [tool.poetry.group.deployment]
 optional = true
