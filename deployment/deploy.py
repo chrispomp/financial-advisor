@@ -10,7 +10,6 @@ from financial_advisor.agent import root_agent
 from vertexai import agent_engines
 from vertexai.preview import reasoning_engines
 
-# Your hardcoded Agent Engine ID
 AGENT_ENGINE_ID = "projects/fsi-banking-agentspace/locations/us-central1/reasoningEngines/4932136483319447552"
 
 FLAGS = flags.FLAGS
@@ -25,9 +24,14 @@ flags.DEFINE_bool("delete", False, "Deletes an existing agent.")
 flags.mark_bool_flags_as_mutual_exclusive(["create", "delete", "update"])
 
 
+# In deployment/deploy.py
+
+# In your new deploy.py
+
 def create() -> None:
     """Creates an agent engine for Financial Advisors."""
     remote_agent = agent_engines.create(
+        # 1. Use the new direct agent passing
         agent_engine=root_agent,
         display_name=root_agent.name,
         requirements=[
@@ -36,11 +40,12 @@ def create() -> None:
             "google-genai (>=1.5.0,<2.0.0)",
             "pydantic (>=2.10.6,<3.0.0)",
             "absl-py (>=2.2.1,<3.0.0)",
-            "matplotlib",
+            "matplotlib", # Requirement for charting
+            "cloudpickle", # Requirement for deployment
         ],
+        # 2. Package the entire agent directory
         extra_packages=[
-            "financial_advisor/agent.py",
-            "financial_advisor/sub_agents/charting_analyst/agent.py",
+            "financial_advisor",
         ],
     )
     print(f"Created remote agent: {remote_agent.resource_name}")
@@ -50,7 +55,7 @@ def update() -> None:
     """Updates an existing agent engine for Financial Advisors."""
     updated_agent = agent_engines.update(
         resource_name=AGENT_ENGINE_ID,
-        agent_engine=app,
+        agent_engine=cast(Any, app),
         display_name=root_agent.name,
         requirements=[
             "google-adk (>=0.0.2)",
@@ -59,10 +64,10 @@ def update() -> None:
             "pydantic (>=2.10.6,<3.0.0)",
             "absl-py (>=2.2.1,<3.0.0)",
             "matplotlib",
+            "cloudpickle",
         ],
         extra_packages=[
-            "financial_advisor/agent.py",
-            "financial_advisor/sub_agents/charting_analyst/agent.py",
+            "financial_advisor",
         ],
     )
     print(f"Updated remote agent: {updated_agent.resource_name}")
