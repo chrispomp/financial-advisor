@@ -55,7 +55,7 @@ def update() -> None:
     """Updates an existing agent engine for Financial Advisors."""
     updated_agent = agent_engines.update(
         resource_name=AGENT_ENGINE_ID,
-        agent_engine=cast(Any, root_agent),  # Use cast to resolve the type error
+        agent_engine=cast(Any, root_agent),
         display_name=AGENT_DISPLAY_NAME,
         requirements=AGENT_REQUIREMENTS,
         extra_packages=AGENT_EXTRA_PACKAGES,
